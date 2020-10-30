@@ -29,7 +29,7 @@ contract Marketplace {
         bool purchased
     );
 
-    constructor() {
+    constructor() public {
         name = "Metro Marketplace";
     }
 
