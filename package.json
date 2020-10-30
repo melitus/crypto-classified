@@ -1,0 +1,8 @@
+{
+  "name": "crypto-marketplace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/melitus/crypto-marketplace.git",
+  "author": "melitus <asmelitus@gmail.com>",
+  "license": "MIT"
+}
