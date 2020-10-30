@@ -4,13 +4,15 @@ require('chai')
   .use(require('chai-as-promised'))
   .should()
 
+//  assertion test format:  assert.equal(<current>, <expected>, <message>);.
+// const [firstAccount, secondAccount, thirdAccount] = accounts;
+
 contract('Marketplace', ([deployer, seller, buyer]) => {
   let marketplace
 
   before(async () => {
     marketplace = await Marketplace.deployed()
   })
-
   describe('deployment', async () => {
     it('deploys successfully', async () => {
       const address = await marketplace.address
@@ -38,6 +40,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
       // SUCCESS
       assert.equal(productCount, 1)
       const event = result.logs[0].args
+      console.log(event)
       assert.equal(event.id.toNumber(), productCount.toNumber(), 'id is correct')
       assert.equal(event.name, 'iPhone X', 'name is correct')
       assert.equal(event.price, '1000000000000000000', 'price is correct')
@@ -45,13 +48,14 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
       assert.equal(event.purchased, false, 'purchased is correct')
 
       // FAILURE: Product must have a name
-      await await marketplace.createProduct('', web3.utils.toWei('1', 'Ether'), { from: seller }).should.be.rejected;
+      await marketplace.createProduct('', web3.utils.toWei('1', 'Ether'), { from: seller }).should.be.rejected;
       // FAILURE: Product must have a price
-      await await marketplace.createProduct('iPhone X', 0, { from: seller }).should.be.rejected;
+      await marketplace.createProduct('iPhone X', 0, { from: seller }).should.be.rejected;
     })
 
     it('lists products', async () => {
       const product = await marketplace.products(productCount)
+      console.log({product})
       assert.equal(product.id.toNumber(), productCount.toNumber(), 'id is correct')
       assert.equal(product.name, 'iPhone X', 'name is correct')
       assert.equal(product.price, '1000000000000000000', 'price is correct')
@@ -85,9 +89,9 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
       price = web3.utils.toWei('1', 'Ether')
       price = new web3.utils.BN(price)
 
-      const exepectedBalance = oldSellerBalance.add(price)
+      const expectedBalance = oldSellerBalance.add(price)
 
-      assert.equal(newSellerBalance.toString(), exepectedBalance.toString())
+      assert.equal(newSellerBalance.toString(), expectedBalance.toString())
 
       // FAILURE: Tries to buy a product that does not exist, i.e., product must have valid id
       await marketplace.purchaseProduct(99, { from: buyer, value: web3.utils.toWei('1', 'Ether')}).should.be.rejected;      // FAILURE: Buyer tries to buy without enough ether

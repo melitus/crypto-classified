@@ -13,7 +13,7 @@ contract Marketplace {
         bool purchased;
     }
 
-    event ProductCreated(
+    event ProductCreatedEvent(
         uint256 id,
         string name,
         uint256 price,
@@ -21,7 +21,7 @@ contract Marketplace {
         bool purchased
     );
 
-    event ProductPurchased(
+    event ProductPurchasedEvent(
         uint256 id,
         string name,
         uint256 price,
@@ -49,7 +49,13 @@ contract Marketplace {
             false
         );
         // Trigger an event
-        emit ProductCreated(productCount, _name, _price, msg.sender, false);
+        emit ProductCreatedEvent(
+            productCount,
+            _name,
+            _price,
+            msg.sender,
+            false
+        );
     }
 
     function purchaseProduct(uint256 _id) public payable {
@@ -74,7 +80,7 @@ contract Marketplace {
         // Pay the seller by sending them Ether
         _seller.transfer(msg.value);
         // Trigger an event
-        emit ProductPurchased(
+        emit ProductPurchasedEvent(
             productCount,
             _product.name,
             _product.price,
